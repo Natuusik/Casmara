@@ -4,459 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CASMARA Прайс-лист 2026</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; }
+        
+        /* Защита по паролю */
+        #auth-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); display: flex;
+            justify-content: center; align-items: center; z-index: 1000;
         }
-        /* Custom scrollbar for better visual quality */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+        .auth-box {
+            background: #fff; padding: 30px; border-radius: 8px; text-align: center;
         }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+        .auth-box input { padding: 10px; margin: 10px 0; width: 80%; font-size: 16px; }
+        .auth-box button {
+            padding: 10px 20px; font-size: 16px; cursor: pointer;
+            background: #333; color: #fff; border: none; border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
+
+        #main-content { display: none; max-width: 1000px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #e9e9e9; }
+        .section-header { background-color: #dcdcdc; font-weight: bold; }
+        
+        /* Ссылки на строки */
+        tr.clickable-row { cursor: pointer; transition: background 0.2s; }
+        tr.clickable-row:hover { background-color: #e6f7ff; }
+        tr.clickable-row td a {
+            display: block; text-decoration: none; color: inherit; width: 100%; height: 100%;
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
+<body>
 
-    <!-- Окно авторизации по паролю -->
-    <div id="auth-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-gray-100 transform transition-all">
-            <div class="text-center mb-6">
-                <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 mb-1">CASMARA</h1>
-                <p class="text-xs tracking-widest text-gray-500 uppercase font-semibold">Прайс-лист 2026</p>
-            </div>
-            <div class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-lg text-sm mb-6 flex items-center gap-2">
-                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                <span>Доступ закрыт. Введите пароль для входа.</span>
-            </div>
-            <form onsubmit="handleAuth(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Пароль доступа</label>
-                    <input type="password" id="password-input" placeholder="Введите пароль..." class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition text-gray-900" required>
-                </div>
-                <div id="auth-error" class="text-red-500 text-xs hidden font-medium flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>Неверный пароль. Попробуйте еще раз (по умолч.: 1234)</span>
-                </div>
-                <button type="submit" class="w-full bg-black hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded-xl transition duration-200 shadow-md hover:shadow-lg active:scale-[0.99]">
-                    Войти в систему
-                </button>
-            </form>
-            <div class="mt-6 text-center text-xs text-gray-400">
-                Подсказка: Пароль по умолчанию <span class="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">1234</span>
-            </div>
+    <!-- Вход по паролю -->
+    <div id="auth-overlay">
+        <div class="auth-box">
+            <h2>Доступ ограничен</h2>
+            <p>Введите пароль для просмотра прайс-листа:</p>
+            <input type="password" id="password-input" placeholder="Пароль">
+            <br>
+            <button onclick="checkPassword()">Войти</button>
+            <p id="error-msg" style="color: red; display: none;">Неверный пароль!</p>
         </div>
     </div>
 
-    <!-- Основное приложение -->
-    <div id="app-container" class="hidden min-h-screen flex flex-col">
-        
-        <!-- Верхняя шапка -->
-        <header class="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-                <div class="flex items-center gap-3 cursor-pointer" onclick="navigateToHome()">
-                    <div class="bg-black text-white font-black text-xl px-2.5 py-1 rounded-md tracking-tighter">C</div>
-                    <div>
-                        <h1 class="text-lg font-bold tracking-tight leading-none text-gray-900">CASMARA</h1>
-                        <p class="text-[10px] text-gray-500 font-medium tracking-wider uppercase">Официальный прайс-лист 2026</p>
-                    </div>
-                </div>
-                
-                <div class="flex items-center gap-4 text-xs text-gray-600">
-                    <div class="hidden sm:flex flex-col text-right border-r border-gray-200 pr-4">
-                        <span class="font-semibold text-gray-800">Тел: +372 5154806</span>
-                        <span class="text-gray-500">info@medesta.eu</span>
-                    </div>
-                    <button onclick="lockApp()" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Заблокировать">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    </button>
-                </div>
-            </div>
-        </header>
+    <!-- Таблица со ссылками на отдельные файлы -->
+    <div id="main-content">
+        <h1 style="text-align:center;">CASMARA ПРАЙСЛИСТ 2026</h1>
+        <p style="text-align:center; color:#666;">Нажмите на любую строку, чтобы открыть отдельную страницу товара</p>
 
-        <!-- Главный контейнер для страниц -->
-        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            
-            <!-- ЭКРАН 1: Таблица общего списка товаров (Home View) -->
-            <div id="view-home" class="space-y-6">
-                
-                <!-- Карточка контактов и поиска -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 space-y-4">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4">
-                        <div>
-                            <h2 class="text-xl font-bold text-gray-900">Прайс-лист продукции CASMARA</h2>
-                            <p class="text-xs text-gray-500 mt-1">Нажмите на любую строку с товаром, чтобы открыть его детальную карточку</p>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-3 text-xs bg-gray-50 p-2.5 rounded-xl border border-gray-200">
-                            <div><span class="text-gray-400">FB:</span> <span class="font-medium text-gray-700">Ksenia Ossina</span></div>
-                            <div class="text-gray-300">|</div>
-                            <div><span class="text-gray-400">Insta:</span> <span class="font-medium text-gray-700">@xenioss</span></div>
-                        </div>
-                    </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Код</th>
+                    <th>Наименование</th>
+                    <th>Объем</th>
+                    <th>Цена с налогом</th>
+                    <th>Мин. цена клиенту</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- EXPERT DERMAPEEL -->
+                <tr class="section-header"><td colspan="5">EXPERT DERMAPEEL хим.пилинги</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a16000.html'">
+                    <td><a href="a16000.html">A16000</a></td>
+                    <td><a href="a16000.html">EXPERT DERMAPEEL PROFESSIONAL KIT проф.набор</a></td>
+                    <td><a href="a16000.html">20 уходов</a></td>
+                    <td><a href="a16000.html">243,00 €</a></td>
+                    <td><a href="a16000.html">-</a></td>
+                </tr>
 
-                    <!-- Панель поиска и фильтров -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="sm:col-span-2 relative">
-                            <input type="text" id="search-input" oninput="renderTable()" placeholder="Поиск по наименованию или коду (напр. Retinol, A07000)..." class="w-full pl-10 pr-4 py-2.5 bg-gray-50 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition">
-                            <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        </div>
-                        <div>
-                            <select id="category-filter" onchange="renderTable()" class="w-full px-3 py-2.5 bg-gray-50 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition text-gray-700">
-                                <option value="ALL">Все категории</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Таблица товаров -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-gray-100/80 text-gray-600 text-xs font-semibold uppercase tracking-wider border-b border-gray-200">
-                                    <th class="py-3.5 px-4 w-12 text-center">Индекс</th>
-                                    <th class="py-3.5 px-4 w-28">Код</th>
-                                    <th class="py-3.5 px-4">Наименование</th>
-                                    <th class="py-3.5 px-4 w-28">Объем</th>
-                                    <th class="py-3.5 px-4 w-32 text-right">Цена с нал.</th>
-                                    <th class="py-3.5 px-4 w-36 text-right">Мин. клиенту</th>
-                                    <th class="py-3.5 px-4 w-10"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-body" class="divide-y divide-gray-100 text-sm">
-                                <!-- Рендерится через JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div id="empty-state" class="hidden p-8 text-center text-gray-500">
-                        Ничего не найдено по вашему запросу.
-                    </div>
-                </div>
-            </div>
-
-            <!-- ЭКРАН 2: Отдельная страница детализации товара (Product View) -->
-            <div id="view-product" class="hidden space-y-6">
-                <!-- Кнопка Назад -->
-                <div class="flex items-center justify-between">
-                    <button onclick="navigateToHome()" class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-gray-400 text-gray-700 font-medium px-4 py-2.5 rounded-xl text-sm transition shadow-sm hover:shadow active:scale-95">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                        <span>Вернуться к прайс-листу</span>
-                    </button>
-                    <span class="text-xs text-gray-400 font-mono" id="detail-index-badge">Индекс: #0</span>
-                </div>
-
-                <!-- Карточка подробностей товара -->
-                <div class="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
-                    <div id="detail-banner" class="bg-gradient-to-r from-gray-900 to-gray-800 text-white p-6 sm:p-8">
-                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                            <span id="detail-category" class="bg-white/20 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full font-medium">Категория</span>
-                            <span id="detail-code-badge" class="font-mono text-xs bg-amber-400 text-black px-2.5 py-1 rounded-md font-bold">A00000</span>
-                        </div>
-                        <h2 id="detail-title" class="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2">Название продукта</h2>
-                        <p id="detail-volume" class="text-gray-300 text-sm">Объем: -</p>
-                    </div>
-
-                    <div class="p-6 sm:p-8 space-y-8">
-                        <!-- Финансовый блок -->
-                        <div>
-                            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Ценовая информация</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div class="bg-gray-50 border border-gray-200 p-4 rounded-xl">
-                                    <div class="text-xs text-gray-500 mb-1">Закупочная цена (с налогом)</div>
-                                    <div id="detail-price" class="text-2xl font-black text-gray-900">0.00 €</div>
-                                </div>
-                                <div class="bg-amber-50/60 border border-amber-200/60 p-4 rounded-xl">
-                                    <div class="text-xs text-amber-800 mb-1">Мин. рекомендуемая цена клиенту</div>
-                                    <div id="detail-minprice" class="text-2xl font-black text-amber-900">0.00 €</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Имитация полного описания товара -->
-                        <div class="space-y-4">
-                            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Подробная информация о продукте</h3>
-                            
-                            <div class="prose prose-sm max-w-none text-gray-600 space-y-3">
-                                <p id="detail-desc">
-                                    Инновационное профессиональное средство CASMARA. Высокоэффективная формула, разработанная с использованием передовых биотехнологий для глубокого ухода за кожей.
-                                </p>
-                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-2 text-xs">
-                                    <div class="font-semibold text-gray-800">Основные преимущества и действие:</div>
-                                    <ul class="list-disc pl-4 space-y-1 text-gray-600">
-                                        <li>Профессиональный стандарт ухода 2026 года</li>
-                                        <li>Оптимально сбалансированный состав активных компонентов</li>
-                                        <li>Обеспечивает видимый и пролонгированный эффект</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Файлы и Ресурсы -->
-                        <div class="border-t border-gray-100 pt-6">
-                            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Документация и материалы</h3>
-                            <div class="flex flex-wrap gap-3">
-                                <a id="btn-download-pdf" href="#" onclick="alert('Файл инструкции скачивается...'); return false;" class="inline-flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-4 py-2.5 rounded-xl text-xs font-medium transition">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                    <span>Скачать протокол процедуры (PDF)</span>
-                                </a>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-        </main>
-
-        <!-- Подвал -->
-        <footer class="bg-white border-t border-gray-200 py-4 mt-auto">
-            <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-400">
-                CASMARA Professional Price List 2026 &copy; Все права защищены.
-            </div>
-        </footer>
+                <!-- RETINOL PRO AGE LINE -->
+                <tr class="section-header"><td colspan="5">NEW! RETINOL PRO AGE LINE!</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a07000.html'">
+                    <td><a href="a07000.html">A07000</a></td>
+                    <td><a href="a07000.html">Retinol Pro Age treatment 0,15%</a></td>
+                    <td><a href="a07000.html">Бокс-2 ухода</a></td>
+                    <td><a href="a07000.html">48,00 €</a></td>
+                    <td><a href="a07000.html">-</a></td>
+                </tr>
+                <tr class="clickable-row" onclick="window.location.href='a07001.html'">
+                    <td><a href="a07001.html">A07001</a></td>
+                    <td><a href="a07001.html">Retinol Renewal Day cream SPF 50</a></td>
+                    <td><a href="a07001.html">50 ml</a></td>
+                    <td><a href="a07001.html">45,30 €</a></td>
+                    <td><a href="a07001.html">62,00 €</a></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <script>
-        // База данных товаров сопоставленная с оригинальным документом
-        const PRODUCTS_DATA = [
-            // EXPERT DERMAPEEL
-            { index: 0, category: "EXPERT DERMAPEEL хим.пилинги", code: "A16000", name: "EXPERT DERMAPEEL PROFESSIONAL KIT проф.набор", volume: "20 уходов", price: "243,00 €", minPrice: "-", highlight: "none" },
-
-            // RETINOL PRO AGE LINE
-            { index: 1, category: "NEW! RETINOL PRO AGE LINE!", code: "A07000", name: "Retinol Pro Age treatment 0,15%", volume: "Бокс-2 ухода", price: "48,00 €", minPrice: "-", highlight: "yellow" },
-            { index: 2, category: "NEW! RETINOL PRO AGE LINE!", code: "A07100", name: "Retinol Pro Age treatment 0,3%", volume: "Бокс-2 ухода", price: "50,00 €", minPrice: "-", highlight: "yellow" },
-            { index: 3, category: "NEW! RETINOL PRO AGE LINE!", code: "A07001", name: "Retinol Renewal Day cream SPF 50 защитный и восстанавлив.", volume: "50 ml", price: "45,30 €", minPrice: "62,00 €", highlight: "none" },
-            { index: 4, category: "NEW! RETINOL PRO AGE LINE!", code: "A07002", name: "Retinol Renewal Night cream 0,15% pure retinol", volume: "30 ml", price: "42,00 €", minPrice: "56,00 €", highlight: "none" },
-            { index: 5, category: "NEW! RETINOL PRO AGE LINE!", code: "A07003", name: "Retinol Renewal Night cream 0,3% pure retinol", volume: "30 ml", price: "41,20 €", minPrice: "57,00 €", highlight: "none" },
-            { index: 6, category: "NEW! RETINOL PRO AGE LINE!", code: "AL0712", name: "RETINOL PROAGE DAY & NIGHT ROUTINE 0,15%", volume: "50 + 30 ml", price: "71,00 €", minPrice: "90,60 €", highlight: "none" },
-            { index: 7, category: "NEW! RETINOL PRO AGE LINE!", code: "AL0713", name: "RETINOL PROAGE DAY & NIGHT ROUTINE 0,3%", volume: "50 + 30 ml", price: "74,10 €", minPrice: "94,20 €", highlight: "none" },
-            { index: 8, category: "NEW! RETINOL PRO AGE LINE!", code: "A07007", name: "Retinol Proage body cream 200 ml крем для тела с ретинолом ночь", volume: "200 ml", price: "40,90 €", minPrice: "51,00 €", highlight: "none" },
-
-            // AGUEDA'S SECRET GOLDEN AGE LINE
-            { index: 9, category: "NEW! AGUEDA'S SECRET GOLDEN AGE LINE омоложение с экзосомами, PDRN, коллагеном", code: "A18000", name: "AGUEDA'S SECRET GOLDEN AGE Treatment box NEW", volume: "Бокс-2 ухода", price: "60,00 €", minPrice: "-", highlight: "orange" },
-            { index: 10, category: "NEW! AGUEDA'S SECRET GOLDEN AGE LINE омоложение с экзосомами, PDRN, коллагеном", code: "A18001", name: "AGUEDA'S SECRET GOLDEN AGE Cream", volume: "50 ml", price: "65,90 €", minPrice: "89,90 €", highlight: "none" },
-            { index: 11, category: "NEW! AGUEDA'S SECRET GOLDEN AGE LINE омоложение с экзосомами, PDRN, коллагеном", code: "A18002", name: "AGUEDA'S SECRET GOLDEN AGE Serum", volume: "50 ml", price: "63,80 €", minPrice: "88,00 €", highlight: "none" },
-            { index: 12, category: "NEW! AGUEDA'S SECRET GOLDEN AGE LINE омоложение с экзосомами, PDRN, коллагеном", code: "A18006", name: "AGUEDA'S SECRET GOLDEN AGE INTENSE AMPOULE", volume: "10*4 ml", price: "42,50 €", minPrice: "54,00 €", highlight: "none" },
-            { index: 13, category: "NEW! AGUEDA'S SECRET GOLDEN AGE LINE омоложение с экзосомами, PDRN, коллагеном", code: "A18007", name: "AGUEDA'S SECRET GOLDEN AGE EYE CREAM NEW", volume: "15 ml", price: "36,40 €", minPrice: "47,00 €", highlight: "none" },
-            { index: 14, category: "NEW! AGUEDA'S SECRET GOLDEN AGE LINE омоложение с экзосомами, PDRN, коллагеном", code: "AL185", name: "AGUEDA'S SECRET GOLDEN AGE BOX CREAM + EYE CREAM NEW", volume: "50+15 ml", price: "85,90 €", minPrice: "120,00 €", highlight: "none" },
-
-            // BOOSTER SHEET MASK
-            { index: 15, category: "CASMARA BOOSTER SHEET MASK Магнитные бустерные маски", code: "A75002", name: "Anti Age Retinol V mask омолаживающая с раст ретинолом", volume: "1 шт", price: "6,20 €", minPrice: "8,90 €", highlight: "none" },
-            { index: 16, category: "CASMARA BOOSTER SHEET MASK Магнитные бустерные маски", code: "A75001", name: "Glow Vitamin C mask с витамином C", volume: "1 шт", price: "6,20 €", minPrice: "8,90 €", highlight: "none" },
-            { index: 17, category: "CASMARA BOOSTER SHEET MASK Магнитные бустерные маски", code: "A75003", name: "Hyaluronic mask увлажняющая", volume: "1 шт", price: "6,20 €", minPrice: "8,90 €", highlight: "none" },
-
-            // URBAN PROTECT LINE
-            { index: 18, category: "ДЛЯ ЛИЦА / URBAN PROTECT LINE", code: "A50011", name: "Recovery Hand cream крем для рук", volume: "50 ml", price: "12,50 €", minPrice: "17,00 €", highlight: "none" },
-            { index: 19, category: "ДЛЯ ЛИЦА / URBAN PROTECT LINE", code: "A09001", name: "DD CREAM Urban Protect Light 01 тонирующий крем SPF30", volume: "50 ml", price: "24,20 €", minPrice: "32,00 €", highlight: "none" },
-            { index: 20, category: "ДЛЯ ЛИЦА / URBAN PROTECT LINE", code: "A09500", name: "DD CREAM Urban Protect Light 00 тонирующий крем SPF50", volume: "50 ml", price: "24,20 €", minPrice: "32,40 €", highlight: "none" },
-            { index: 21, category: "ДЛЯ ЛИЦА / URBAN PROTECT LINE", code: "A09501", name: "DD CREAM Urban Protect Light 01 тонирующий крем SPF50", volume: "50 ml", price: "24,20 €", minPrice: "32,40 €", highlight: "none" },
-            { index: 22, category: "ДЛЯ ЛИЦА / URBAN PROTECT LINE", code: "A09502", name: "DD CREAM Urban Protect Light 02 тонирующий крем SPF50", volume: "50 ml", price: "24,20 €", minPrice: "32,40 €", highlight: "none" },
-            { index: 23, category: "ДЛЯ ЛИЦА / URBAN PROTECT LINE", code: "A12010", name: "MICELLAR WATER URBAN PROTECT очищ.мицелл вода", volume: "400 ml", price: "15,00 €", minPrice: "23,00 €", highlight: "none" },
-
-            // ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ
-            { index: 24, category: "ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ", code: "A00008", name: "TONIC ESSENSE тоник для лица", volume: "150 ml", price: "14,90 €", minPrice: "22,00 €", highlight: "none" },
-            { index: 25, category: "ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ", code: "A91001", name: "BALANCING cleanser с экстрактом ягод Годжи", volume: "150 ml", price: "14,90 €", minPrice: "22,00 €", highlight: "none" },
-            { index: 26, category: "ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ", code: "A90004", name: "BALANCING cleanser с экстрактом ягод Годжи", volume: "500 ml", price: "35,00 €", minPrice: "-", highlight: "none" },
-            { index: 27, category: "ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ", code: "A01002", name: "Cleanser 3 in 1 deep Cleansing с зел.чаем", volume: "150 ml", price: "14,90 €", minPrice: "22,00 €", highlight: "none" },
-            { index: 28, category: "ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ", code: "A00006", name: "Cleanser 3 in 1 dep cleanser с зел.чаем", volume: "500 ml", price: "35,00 €", minPrice: "-", highlight: "none" },
-            { index: 29, category: "ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ", code: "A91005", name: "Natural peeling Three Action пилинг на основе кислот", volume: "150 ml", price: "28,50 €", minPrice: "39,90 €", highlight: "none" },
-            { index: 30, category: "ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ", code: "A00113", name: "Anti-Blemish cleanser очиститель-себорегуляторб с азелогицином", volume: "150 ml", price: "14,90 €", minPrice: "22,00 €", highlight: "none" },
-            { index: 31, category: "ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ", code: "A01104", name: "Detox Cleanser очиститель с салиц кислотой", volume: "150 ml", price: "-", minPrice: "-", highlight: "none" },
-            { index: 32, category: "ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ", code: "A90006", name: "Natural peeling Three Action пилинг на основе кислот", volume: "500 ml", price: "-", minPrice: "-", highlight: "none" },
-            { index: 33, category: "ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ", code: "A90010", name: "OPEN PORE GEL размягчает поры перед чисткой", volume: "150 ml", price: "-", minPrice: "-", highlight: "none" },
-
-            // NEW! СЕРИЯ Q10 RESCUE
-            { index: 34, category: "NEW! СЕРИЯ Q10 RESCUE Anti-age", code: "A17200", name: "Q10 Rescue treatment box", volume: "Бокс-2 ухода", price: "-", minPrice: "-", highlight: "blue" },
-            { index: 35, category: "NEW! СЕРИЯ Q10 RESCUE Anti-age", code: "A17201", name: "Q10 Resque Nutri cream ультрапитательный крем 50+", volume: "50 ml", price: "53,00 €", minPrice: "78,00 €", highlight: "blue" }
-        ];
-
-        // Состояние приложения
-        let isAuthenticated = false;
-
-        // Авторизация
-        function handleAuth(event) {
-            event.preventDefault();
-            const passwordInput = document.getElementById('password-input').value;
-            const errorElement = document.getElementById('auth-error');
-
-            if (passwordInput === '1234') {
-                isAuthenticated = true;
-                sessionStorage.setItem('casmara_auth', 'true');
-                document.getElementById('auth-overlay').classList.add('hidden');
-                document.getElementById('app-container').classList.remove('hidden');
-                initApp();
+        function checkPassword() {
+            const pwd = document.getElementById('password-input').value;
+            if (pwd === '1234') {
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                sessionStorage.setItem('authenticated', 'true');
             } else {
-                errorElement.classList.remove('hidden');
+                document.getElementById('error-msg').style.display = 'block';
             }
         }
 
-        // Заблокировать приложение
-        function lockApp() {
-            isAuthenticated = false;
-            sessionStorage.removeItem('casmara_auth');
-            document.getElementById('app-container').classList.add('hidden');
-            document.getElementById('auth-overlay').classList.remove('hidden');
-            document.getElementById('password-input').value = '';
-            document.getElementById('auth-error').classList.add('hidden');
-            window.location.hash = '';
-        }
-
-        // Инициализация при загрузке
-        window.addEventListener('DOMContentLoaded', () => {
-            // Проверка существующей сессии
-            if (sessionStorage.getItem('casmara_auth') === 'true') {
-                isAuthenticated = true;
-                document.getElementById('auth-overlay').classList.add('hidden');
-                document.getElementById('app-container').classList.remove('hidden');
-                initApp();
-            }
-        });
-
-        // Настройка категорий и подписка на роутинг
-        function initApp() {
-            populateCategories();
-            renderTable();
-            handleRoute(); // Вызов роутера
-            window.addEventListener('hashchange', handleRoute);
-        }
-
-        // Заполнение селекта категорий
-        function populateCategories() {
-            const select = document.getElementById('category-filter');
-            const categories = [...new Set(PRODUCTS_DATA.map(p => p.category))];
-            
-            // Очищаем старые
-            select.innerHTML = '<option value="ALL">Все категории</option>';
-            
-            categories.forEach(cat => {
-                const opt = document.createElement('option');
-                opt.value = cat;
-                opt.textContent = cat;
-                select.appendChild(opt);
-            });
-        }
-
-        // Маршрутизатор (Routing based on Hash: #product/INDEX)
-        function handleRoute() {
-            if (!isAuthenticated) return;
-
-            const hash = window.location.hash;
-            const homeView = document.getElementById('view-home');
-            const productView = document.getElementById('view-product');
-
-            if (hash.startsWith('#product/')) {
-                const productIndex = parseInt(hash.replace('#product/', ''), 10);
-                const product = PRODUCTS_DATA.find(p => p.index === productIndex);
-
-                if (product) {
-                    showProductDetailView(product);
-                    homeView.classList.add('hidden');
-                    productView.classList.remove('hidden');
-                    window.scrollTo(0, 0);
-                } else {
-                    navigateToHome();
-                }
-            } else {
-                // Главная страница
-                homeView.classList.remove('hidden');
-                productView.classList.add('hidden');
-            }
-        }
-
-        // Переход на главную
-        function navigateToHome() {
-            window.location.hash = '';
-        }
-
-        // Переход на страницу продукта по индексу
-        function navigateToProduct(index) {
-            window.location.hash = `product/${index}`;
-        }
-
-        // Отрисовка таблицы
-        function renderTable() {
-            const tbody = document.getElementById('table-body');
-            const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
-            const selectedCat = document.getElementById('category-filter').value;
-            const emptyState = document.getElementById('empty-state');
-
-            tbody.innerHTML = '';
-
-            let currentCategory = '';
-            let visibleCount = 0;
-
-            PRODUCTS_DATA.forEach(item => {
-                // Фильтрация
-                const matchesSearch = item.name.toLowerCase().includes(searchQuery) || item.code.toLowerCase().includes(searchQuery);
-                const matchesCategory = selectedCat === 'ALL' || item.category === selectedCat;
-
-                if (matchesSearch && matchesCategory) {
-                    visibleCount++;
-
-                    // Отображаем заголовок категории, если она сменилась (только если не выбран конкретный фильтр)
-                    if (item.category !== currentCategory && selectedCat === 'ALL' && !searchQuery) {
-                        currentCategory = item.category;
-                        const catRow = document.createElement('tr');
-                        catRow.className = 'bg-gray-100/90 font-bold text-gray-800 text-xs tracking-wide uppercase border-y border-gray-200';
-                        catRow.innerHTML = `<td colspan="7" class="py-2.5 px-4 text-gray-900">${currentCategory}</td>`;
-                        tbody.appendChild(catRow);
-                    }
-
-                    // Оформление подсветок
-                    let rowBgClass = 'hover:bg-gray-50';
-                    if (item.highlight === 'yellow') rowBgClass = 'bg-yellow-50/70 hover:bg-yellow-100/70';
-                    if (item.highlight === 'orange') rowBgClass = 'bg-amber-50/70 hover:bg-amber-100/70';
-                    if (item.highlight === 'blue') rowBgClass = 'bg-sky-50/70 hover:bg-sky-100/70';
-
-                    const row = document.createElement('tr');
-                    row.className = `${rowBgClass} cursor-pointer transition border-b border-gray-100 group`;
-                    row.onclick = () => navigateToProduct(item.index);
-
-                    row.innerHTML = `
-                        <td class="py-3 px-4 text-center font-mono text-xs text-gray-400 group-hover:text-black">${item.index}</td>
-                        <td class="py-3 px-4 font-mono font-semibold text-xs text-gray-900">${item.code}</td>
-                        <td class="py-3 px-4 font-medium text-gray-900 group-hover:text-amber-600 transition">${item.name}</td>
-                        <td class="py-3 px-4 text-xs text-gray-500 whitespace-nowrap">${item.volume}</td>
-                        <td class="py-3 px-4 text-right font-semibold text-gray-900 whitespace-nowrap">${item.price}</td>
-                        <td class="py-3 px-4 text-right text-xs text-gray-600 italic whitespace-nowrap">${item.minPrice}</td>
-                        <td class="py-3 px-4 text-center text-gray-300 group-hover:text-gray-600">
-                            <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                }
-            });
-
-            if (visibleCount === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-            }
-        }
-
-        // Отрисовка детализации товара на отдельном экране
-        function showProductDetailView(product) {
-            document.getElementById('detail-index-badge').textContent = `Индекс товара: #${product.index}`;
-            document.getElementById('detail-category').textContent = product.category;
-            document.getElementById('detail-code-badge').textContent = product.code;
-            document.getElementById('detail-title').textContent = product.name;
-            document.getElementById('detail-volume').textContent = `Объем / Фасовка: ${product.volume}`;
-            document.getElementById('detail-price').textContent = product.price;
-            document.getElementById('detail-minprice').textContent = product.minPrice;
-            document.getElementById('detail-desc').textContent = `${product.name} (${product.code}) — премиальное косметическое средство бренда CASMARA. Формула оптимизирована для профессионального применения в эстетических центрах и салонных программах ухода.`;
+        // Автоматический вход при повторном переходе назад
+        if (sessionStorage.getItem('authenticated') === 'true') {
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
         }
     </script>
 </body>
