@@ -217,3 +217,56 @@
                 <tr class="clickable-row" onclick="window.location.href='al2503.html'"><td><a href="al2503.html">AL2503</a></td><td><a href="al2503.html">REHYDRATING SET Ocean miracle Fresh serum 50ml + SPF50 Photoaging cream-gel + bronze cosmetic bag</a></td><td>50 ml+50 ml</td><td class="price-col">43,90</td><td class="price-col">57,00</td></tr>
                 <tr class="clickable-row" onclick="window.location.href='al2508.html'"><td><a href="al2508.html">AL2508</a></td><td><a href="al2508.html">RED PACK Rgnerin Hydro-Nutri cream 50 ml + Wrinkle serum 50 ml</a></td><td>50 ml+50 ml</td><td class="price-col">66,80</td><td class="price-col">89,60</td></tr>
                 <tr class="clickable-row" onclick="window.location.href='al2509.html'"><td><a href="al2509.html">AL2509</a></td><td><a href="al2509.html">RED PACK HYDRA LIFTING FRESH CREAM 50 ml+ SERUM 50 ml</a></td><td>50 ml+50 ml</td><td class="price-col">44,90</td><td class="price-col">65,00</td></tr>
+
+
+<script>
+    // Пароль по умолчанию
+    const SECRET_PASSWORD = '1234';
+
+    // Функция проверки введённого пароля
+    function checkPassword() {
+        const inputField = document.getElementById('password-input');
+        const userPassword = inputField.value;
+        const errorMsg = document.getElementById('error-msg');
+
+        if (userPassword === SECRET_PASSWORD) {
+            // Сохраняем факт успешного входа в текущей сессии
+            sessionStorage.setItem('casmara_auth', 'true');
+            showContent();
+        } else {
+            // Показываем сообщение об ошибке
+            if (errorMsg) {
+                errorMsg.style.display = 'block';
+            } else {
+                alert('Неверный пароль!');
+            }
+        }
+    }
+
+    // Функция открытия основного контента
+    function showContent() {
+        const overlay = document.getElementById('auth-overlay');
+        const content = document.getElementById('main-content');
+
+        if (overlay) overlay.style.display = 'none';
+        if (content) content.style.display = 'block';
+    }
+
+    // Проверка при загрузке страницы (если пользователь уже вводил пароль)
+    document.addEventListener('DOMContentLoaded', function() {
+        if (sessionStorage.getItem('casmara_auth') === 'true') {
+            showContent();
+        }
+
+        // Вход по нажатию клавиши Enter в поле ввода
+        const inputField = document.getElementById('password-input');
+        if (inputField) {
+            inputField.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+        }
+    });
+</script>
+
