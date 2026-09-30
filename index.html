@@ -5,114 +5,215 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CASMARA Прайс-лист 2026</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f8; color: #333; }
         
         /* Защита по паролю */
         #auth-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); display: flex;
-            justify-content: center; align-items: center; z-index: 1000;
+            background: rgba(0, 0, 0, 0.88); display: flex; justify-content: center; align-items: center; z-index: 9999;
         }
         .auth-box {
-            background: #fff; padding: 30px; border-radius: 8px; text-align: center;
+            background: #fff; padding: 35px 25px; border-radius: 12px; text-align: center; width: 90%; max-width: 400px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
         }
-        .auth-box input { padding: 10px; margin: 10px 0; width: 80%; font-size: 16px; }
+        .auth-box h2 { margin-top: 0; color: #111; }
+        .auth-box input {
+            padding: 12px; margin: 15px 0; width: 100%; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; outline: none;
+        }
         .auth-box button {
-            padding: 10px 20px; font-size: 16px; cursor: pointer;
-            background: #333; color: #fff; border: none; border-radius: 4px;
+            padding: 12px; width: 100%; font-size: 16px; cursor: pointer; background: #222; color: #fff; border: none; border-radius: 6px; font-weight: bold;
         }
+        .auth-box button:hover { background: #444; }
 
-        #main-content { display: none; max-width: 1000px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        th { background-color: #e9e9e9; }
-        .section-header { background-color: #dcdcdc; font-weight: bold; }
+        /* Контент прайс-листа */
+        #main-content { display: none; max-width: 1200px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .header-title { text-align: center; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .contacts { text-align: center; font-size: 13px; color: #666; margin-bottom: 25px; line-height: 1.5; }
         
-        /* Ссылки на строки */
-        tr.clickable-row { cursor: pointer; transition: background 0.2s; }
-        tr.clickable-row:hover { background-color: #e6f7ff; }
-        tr.clickable-row td a {
-            display: block; text-decoration: none; color: inherit; width: 100%; height: 100%;
-        }
+        /* Таблица */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        th, td { border: 1px solid #e0e0e0; padding: 8px 10px; text-align: left; }
+        th { background-color: #222; color: #fff; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+        .section-header { background-color: #e9ecef; font-weight: bold; font-size: 13px; color: #111; }
+        
+        /* Подсветки категорий */
+        .bg-yellow { background-color: #ffffcc; }
+        .bg-orange { background-color: #ffe5cc; }
+        .bg-blue { background-color: #e6f7ff; }
+        .bg-green { background-color: #e6ffe6; }
+
+        /* Ссылки-строки */
+        tr.clickable-row { cursor: pointer; transition: background 0.15s ease-in-out; }
+        tr.clickable-row:hover { background-color: #dbeafe !important; }
+        tr.clickable-row td a { display: block; text-decoration: none; color: inherit; width: 100%; height: 100%; }
+        
+        .price-col { font-weight: bold; text-align: right; }
     </style>
 </head>
 <body>
 
-    <!-- Вход по паролю -->
+    <!-- Окно авторизации -->
     <div id="auth-overlay">
         <div class="auth-box">
-            <h2>Доступ ограничен</h2>
-            <p>Введите пароль для просмотра прайс-листа:</p>
+            <h2>CASMARA</h2>
+            <p>Введите пароль доступа:</p>
             <input type="password" id="password-input" placeholder="Пароль">
-            <br>
             <button onclick="checkPassword()">Войти</button>
-            <p id="error-msg" style="color: red; display: none;">Неверный пароль!</p>
+            <p id="error-msg" style="color: #d9534f; display: none; margin-top: 10px; font-size: 14px;">Неверный пароль!</p>
         </div>
     </div>
 
-    <!-- Таблица со ссылками на отдельные файлы -->
+    <!-- Основной прайс-лист -->
     <div id="main-content">
-        <h1 style="text-align:center;">CASMARA ПРАЙСЛИСТ 2026</h1>
-        <p style="text-align:center; color:#666;">Нажмите на любую строку, чтобы открыть отдельную страницу товара</p>
+        <h1 class="header-title">CASMARA ПРАЙСЛИСТ 2026</h1>
+        <div class="contacts">
+            Tel. +372 5154806 | info@medesta.eu<br>
+            FB: Ksenia Ossina | Insta: @xenioss
+        </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Код</th>
-                    <th>Наименование</th>
-                    <th>Объем</th>
-                    <th>Цена с налогом</th>
-                    <th>Мин. цена клиенту</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">Код</th>
+                        <th style="width: 50%;">Наименование</th>
+                        <th style="width: 15%;">Объем</th>
+                        <th style="width: 12.5%;">Цена (с нал.)</th>
+                        <th style="width: 12.5%;">Мин. цена клиенту</th>
+                    </tr>
+                </thead>
+                <tbody>
                 <!-- EXPERT DERMAPEEL -->
                 <tr class="section-header"><td colspan="5">EXPERT DERMAPEEL хим.пилинги</td></tr>
-                <tr class="clickable-row" onclick="window.location.href='a16000.html'">
-                    <td><a href="a16000.html">A16000</a></td>
-                    <td><a href="a16000.html">EXPERT DERMAPEEL PROFESSIONAL KIT проф.набор</a></td>
-                    <td><a href="a16000.html">20 уходов</a></td>
-                    <td><a href="a16000.html">243,00 €</a></td>
-                    <td><a href="a16000.html">-</a></td>
-                </tr>
+                <tr class="clickable-row" onclick="window.location.href='a16000.html'"><td><a href="a16000.html">A16000</a></td><td><a href="a16000.html">EXPERT DERMAPEEL PROFESSIONAL KIT проф.набор</a></td><td>20 уходов</td><td class="price-col">243,00</td><td class="price-col">-</td></tr>
 
                 <!-- RETINOL PRO AGE LINE -->
                 <tr class="section-header"><td colspan="5">NEW! RETINOL PRO AGE LINE!</td></tr>
-                <tr class="clickable-row" onclick="window.location.href='a07000.html'">
-                    <td><a href="a07000.html">A07000</a></td>
-                    <td><a href="a07000.html">Retinol Pro Age treatment 0,15%</a></td>
-                    <td><a href="a07000.html">Бокс-2 ухода</a></td>
-                    <td><a href="a07000.html">48,00 €</a></td>
-                    <td><a href="a07000.html">-</a></td>
-                </tr>
-                <tr class="clickable-row" onclick="window.location.href='a07001.html'">
-                    <td><a href="a07001.html">A07001</a></td>
-                    <td><a href="a07001.html">Retinol Renewal Day cream SPF 50</a></td>
-                    <td><a href="a07001.html">50 ml</a></td>
-                    <td><a href="a07001.html">45,30 €</a></td>
-                    <td><a href="a07001.html">62,00 €</a></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                <tr class="clickable-row bg-yellow" onclick="window.location.href='a07000.html'"><td><a href="a07000.html">A07000</a></td><td><a href="a07000.html">Retinol Pro Age treatment 0,15%</a></td><td>Бокс-2 ухода</td><td class="price-col">48,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row bg-yellow" onclick="window.location.href='a07100.html'"><td><a href="a07100.html">A07100</a></td><td><a href="a07100.html">Retinol Pro Age treatment 0,3%</a></td><td>Бокс-2 ухода</td><td class="price-col">50,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a07001.html'"><td><a href="a07001.html">A07001</a></td><td><a href="a07001.html">Retinol Renewal Day cream SPF 50 защитный и восстанавлив.</a></td><td>50 ml</td><td class="price-col">45,30</td><td class="price-col">62,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a07002.html'"><td><a href="a07002.html">A07002</a></td><td><a href="a07002.html">Retinol Renewal Night cream 0,15% pure retinol</a></td><td>30 ml</td><td class="price-col">42,00</td><td class="price-col">56,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a07003.html'"><td><a href="a07003.html">A07003</a></td><td><a href="a07003.html">Retinol Renewal Night cream 0,3% pure retinol</a></td><td>30 ml</td><td class="price-col">41,20</td><td class="price-col">57,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='al0712.html'"><td><a href="al0712.html">AL0712</a></td><td><a href="al0712.html">RETINOL PROAGE DAY & NIGHT ROUTINE 0,15%</a></td><td>50 + 30 ml</td><td class="price-col">71,00</td><td class="price-col">90,60</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='al0713.html'"><td><a href="al0713.html">AL0713</a></td><td><a href="al0713.html">RETINOL PROAGE DAY & NIGHT ROUTINE 0,3%</a></td><td>50 + 30 ml</td><td class="price-col">74,10</td><td class="price-col">94,20</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a07007.html'"><td><a href="a07007.html">A07007</a></td><td><a href="a07007.html">Retinol Proage body cream 200 ml крем для тела с ретинолом ночь</a></td><td>200 ml</td><td class="price-col">40,90</td><td class="price-col">51,00</td></tr>
 
-    <script>
-        function checkPassword() {
-            const pwd = document.getElementById('password-input').value;
-            if (pwd === '1234') {
-                document.getElementById('auth-overlay').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                sessionStorage.setItem('authenticated', 'true');
-            } else {
-                document.getElementById('error-msg').style.display = 'block';
-            }
-        }
+                <!-- AGUEDA'S SECRET -->
+                <tr class="section-header"><td colspan="5">NEW! AGUEDA'S SECRET GOLDEN AGE LINE омоложение с экзосомами, PDRN, коллагеном</td></tr>
+                <tr class="clickable-row bg-orange" onclick="window.location.href='a18000.html'"><td><a href="a18000.html">A18000</a></td><td><a href="a18000.html">AGUEDA'S SECRET GOLDEN AGE Treatment box NEW</a></td><td>Бокс-2 ухода</td><td class="price-col">60,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a18001.html'"><td><a href="a18001.html">A18001</a></td><td><a href="a18001.html">AGUEDA'S SECRET GOLDEN AGE Cream</a></td><td>50 ml</td><td class="price-col">65,90</td><td class="price-col">89,90</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a18002.html'"><td><a href="a18002.html">A18002</a></td><td><a href="a18002.html">AGUEDA'S SECRET GOLDEN AGE Serum</a></td><td>50 ml</td><td class="price-col">63,80</td><td class="price-col">88,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a18006.html'"><td><a href="a18006.html">A18006</a></td><td><a href="a18006.html">AGUEDA'S SECRET GOLDEN AGE INTENSE AMPOULE</a></td><td>10*4 ml</td><td class="price-col">42,50</td><td class="price-col">54,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a18007.html'"><td><a href="a18007.html">A18007</a></td><td><a href="a18007.html">AGUEDA'S SECRET GOLDEN AGE EYE CREAM NEW</a></td><td>15 ml</td><td class="price-col">36,40</td><td class="price-col">47,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='al185.html'"><td><a href="al185.html">AL185</a></td><td><a href="al185.html">AGUEDA'S SECRET GOLDEN AGE BOX CREAM +EYE CREAM NEW</a></td><td>50+15 ml</td><td class="price-col">85,90</td><td class="price-col">120,00</td></tr>
 
-        // Автоматический вход при повторном переходе назад
-        if (sessionStorage.getItem('authenticated') === 'true') {
-            document.getElementById('auth-overlay').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
-        }
-    </script>
-</body>
-</html>
+                <!-- BOOSTER SHEET MASK -->
+                <tr class="section-header"><td colspan="5">CASMARA BOOSTER SHEET MASK Магнитные бустерные маски</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a75002.html'"><td><a href="a75002.html">A75002</a></td><td><a href="a75002.html">Anti Age Retinol V mask омолаживающая с раст.ретинолом</a></td><td>1 шт</td><td class="price-col">6,20</td><td class="price-col">8,90</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a75001.html'"><td><a href="a75001.html">A75001</a></td><td><a href="a75001.html">Glow Vitamin C mask с витамином C</a></td><td>1 шт</td><td class="price-col">6,20</td><td class="price-col">8,90</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a75003.html'"><td><a href="a75003.html">A75003</a></td><td><a href="a75003.html">Hyaluronic mask увлажняющая</a></td><td>1 шт</td><td class="price-col">6,20</td><td class="price-col">8,90</td></tr>
+
+                <!-- URBAN PROTECT LINE -->
+                <tr class="section-header"><td colspan="5">ДЛЯ ЛИЦА / URBAN PROTECT LINE</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a50011.html'"><td><a href="a50011.html">A50011</a></td><td><a href="a50011.html">Recovery Hand cream крем для рук</a></td><td>50 ml</td><td class="price-col">12,50</td><td class="price-col">17,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a09001.html'"><td><a href="a09001.html">A09001</a></td><td><a href="a09001.html">DD CREAM Urban Protect Light 01 тонирующий крем SPF30</a></td><td>50 ml</td><td class="price-col">24,20</td><td class="price-col">32,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a09500.html'"><td><a href="a09500.html">A09500</a></td><td><a href="a09500.html">DD CREAM Urban Protect Light 00 тонирующий крем SPF50</a></td><td>50 ml</td><td class="price-col">24,20</td><td class="price-col">32,40</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a09501.html'"><td><a href="a09501.html">A09501</a></td><td><a href="a09501.html">DD CREAM Urban Protect Light 01 тонирующий крем SPF50</a></td><td>50 ml</td><td class="price-col">24,20</td><td class="price-col">32,40</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a09502.html'"><td><a href="a09502.html">A09502</a></td><td><a href="a09502.html">DD CREAM Urban Protect Light 02 тонирующий крем SPF50</a></td><td>50 ml</td><td class="price-col">24,20</td><td class="price-col">32,40</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a12010.html'"><td><a href="a12010.html">A12010</a></td><td><a href="a12010.html">MICELLAR WATER URBAN PROTECT очищ.мицелл вода</a></td><td>400 ml</td><td class="price-col">15,00</td><td class="price-col">23,00</td></tr>
+
+                <!-- ОЧИСТИТЕЛИ ПРЕМИУМ -->
+                <tr class="section-header"><td colspan="5">ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a00008.html'"><td><a href="a00008.html">A00008</a></td><td><a href="a00008.html">TONIC ESSENSE тоник для лица</a></td><td>150 ml</td><td class="price-col">14,90</td><td class="price-col">22,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a91001.html'"><td><a href="a91001.html">A91001</a></td><td><a href="a91001.html">BALANCING cleanser с экстрактом ягод Годжи</a></td><td>150 ml</td><td class="price-col">14,90</td><td class="price-col">22,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a90004.html'"><td><a href="a90004.html">A90004</a></td><td><a href="a90004.html">BALANCING cleanser с экстрактом ягод Годжи</a></td><td>500 ml</td><td class="price-col">35,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a01002.html'"><td><a href="a01002.html">A01002</a></td><td><a href="a01002.html">Cleanser 3 in 1 deep Cleansing с зел.чаем</a></td><td>150 ml</td><td class="price-col">14,90</td><td class="price-col">22,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a00006.html'"><td><a href="a00006.html">A00006</a></td><td><a href="a00006.html">Cleanser 3 in 1 dep cleanser с зел.чаем</a></td><td>500 ml</td><td class="price-col">35,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a91005.html'"><td><a href="a91005.html">A91005</a></td><td><a href="a91005.html">Natural peeling Three Action пилинг на основе кислот</a></td><td>150 ml</td><td class="price-col">28,50</td><td class="price-col">39,90</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a00113.html'"><td><a href="a00113.html">A00113</a></td><td><a href="a00113.html">Anti- Blemish cleanser очиститель- себорегуляторб с азелоглицином</a></td><td>150 ml</td><td class="price-col">14,90</td><td class="price-col">22,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a01104.html'"><td><a href="a01104.html">A01104</a></td><td><a href="a01104.html">Detox Cleanser очиститель с салиц кислотой</a></td><td>150 ml</td><td class="price-col">14,90</td><td class="price-col">22,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a90006.html'"><td><a href="a90006.html">A90006</a></td><td><a href="a90006.html">Natural peeling Three Action пилинг на основе кислот</a></td><td>500 ml</td><td class="price-col">49,60</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a90010.html'"><td><a href="a90010.html">A90010</a></td><td><a href="a90010.html">OPEN PORE GEL размягчает поры перед чисткой</a></td><td>150 ml</td><td class="price-col">48,60</td><td class="price-col">-</td></tr>
+
+                <!-- Q10 RESCUE -->
+                <tr class="section-header"><td colspan="5">NEW! СЕРИЯ Q10 RESCUE Anti-age</td></tr>
+                <tr class="clickable-row bg-blue" onclick="window.location.href='a17200.html'"><td><a href="a17200.html">A17200</a></td><td><a href="a17200.html">Q10 Rescue treatment box</a></td><td>Бокс-2 ухода</td><td class="price-col">56,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a17201.html'"><td><a href="a17201.html">A17201</a></td><td><a href="a17201.html">Q10 Resque Nutri cream ультрапитательный крем 50+</a></td><td>50 ml</td><td class="price-col">53,00</td><td class="price-col">78,00</td></tr>
+
+                <!-- INFINITY -->
+                <tr class="section-header"><td colspan="5">СЕРИЯ INFINITY Омоложение</td></tr>
+                <tr class="clickable-row bg-blue" onclick="window.location.href='a95000.html'"><td><a href="a95000.html">A95000</a></td><td><a href="a95000.html">Infinity treatment box</a></td><td>Бокс-2 ухода</td><td class="price-col">56,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a95001.html'"><td><a href="a95001.html">A95001</a></td><td><a href="a95001.html">Infinity cream Омолаживающий крем</a></td><td>50 ml</td><td class="price-col">53,00</td><td class="price-col">78,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a96002.html'"><td><a href="a96002.html">A96002</a></td><td><a href="a96002.html">Infinity Eye serum</a></td><td>10 ml</td><td class="price-col">36,40</td><td class="price-col">47,00</td></tr>
+
+                <!-- MICRONEEDLING -->
+                <tr class="section-header"><td colspan="5">MICRONEEDLING</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='aa0005.html'"><td><a href="aa0005.html">AA0005</a></td><td><a href="aa0005.html">Activator Pen с системой подачи препарата</a></td><td>1 штука</td><td class="price-col">682,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a50015.html'"><td><a href="a50015.html">A50015</a></td><td><a href="a50015.html">EXOSOMES COLLAGEN LIFT NEW</a></td><td>5 ml</td><td class="price-col">33,50</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a50012.html'"><td><a href="a50012.html">A50012</a></td><td><a href="a50012.html">Age Reverse ампульный концентрат для лица</a></td><td>5 ml</td><td class="price-col">33,50</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a50013.html'"><td><a href="a50013.html">A50013</a></td><td><a href="a50013.html">Radiance Vitamin витаминный концентрат для лица</a></td><td>5 ml</td><td class="price-col">33,50</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a50014.html'"><td><a href="a50014.html">A50014</a></td><td><a href="a50014.html">Instawhite+ осветляющий концентрат для лица</a></td><td>5 ml</td><td class="price-col">33,50</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='aa0007.html'"><td><a href="aa0007.html">AA0007</a></td><td><a href="aa0007.html">36-игольная насадка+ шприц 5 мл+ игла</a></td><td>1 набор</td><td class="price-col">9,60</td><td class="price-col">-</td></tr>
+
+                <!-- SUN BEAUTY -->
+                <tr class="section-header"><td colspan="5">SUN BEAUTY</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a05008.html'"><td><a href="a05008.html">A05008</a></td><td><a href="a05008.html">Invisible defense stick SPF 50+ NEW! Для лица</a></td><td>30 ml</td><td class="price-col">23,40</td><td class="price-col">35,80</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a05002.html'"><td><a href="a05002.html">A05002</a></td><td><a href="a05002.html">Photoaging control gel cream SPF 50+ крем-гель для лица</a></td><td>50 ml</td><td class="price-col">24,00</td><td class="price-col">36,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a05006.html'"><td><a href="a05006.html">A05006</a></td><td><a href="a05006.html">PHOTOAGING BODY LOTION SPF50 для тела</a></td><td>200 ml</td><td class="price-col">28,00</td><td class="price-col">38,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a05007.html'"><td><a href="a05007.html">A05007</a></td><td><a href="a05007.html">VITAMIN TAN MAGNIFYER OIL SPF30 масло для тела</a></td><td>200 ml</td><td class="price-col">27,20</td><td class="price-col">37,20</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a05004.html'"><td><a href="a05004.html">A05004</a></td><td><a href="a05004.html">After Sun Intensive Repair gel успокаивающий гель для тела</a></td><td>200 ml</td><td class="price-col">18,00</td><td class="price-col">28,00</td></tr>
+
+                <!-- АМПУЛЬНЫЕ КОНЦЕНТРАТЫ -->
+                <tr class="section-header"><td colspan="5">АМПУЛЬНЫЕ КОНЦЕНТРАТЫ</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a04106.html'"><td><a href="a04106.html">A04106</a></td><td><a href="a04106.html">Hyal complex – глубокое увлажнение</a></td><td>4ml</td><td class="price-col">3,70</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a04100.html'"><td><a href="a04100.html">A04100</a></td><td><a href="a04100.html">Equilibrium –увлажн. для жирной кожи</a></td><td>4ml</td><td class="price-col">3,70</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a04101.html'"><td><a href="a04101.html">A04101</a></td><td><a href="a04101.html">Stabilizer- успокоение, купероз</a></td><td>4ml</td><td class="price-col">3,70</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a04102.html'"><td><a href="a04102.html">A04102</a></td><td><a href="a04102.html">Energetic – метаболизм улучшает</a></td><td>4ml</td><td class="price-col">3,70</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a04103.html'"><td><a href="a04103.html">A04103</a></td><td><a href="a04103.html">Hidrix – увлажнение для сухой кожи</a></td><td>4ml</td><td class="price-col">3,70</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a04104.html'"><td><a href="a04104.html">A04104</a></td><td><a href="a04104.html">Repair – восстановление</a></td><td>4ml</td><td class="price-col">3,70</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a04105.html'"><td><a href="a04105.html">A04105</a></td><td><a href="a04105.html">Elastin – лифтинг, упругость</a></td><td>4ml</td><td class="price-col">3,70</td><td class="price-col">-</td></tr>
+
+                <!-- SUPER-CONCENTRATE! -->
+                <tr class="section-header"><td colspan="5">SUPER-CONCENTRATE!</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a14001.html'"><td><a href="a14001.html">A14001</a></td><td><a href="a14001.html">NIGHT CURE SUPER-CONCENTRATE exosomes</a></td><td>30 ml</td><td class="price-col">55,00</td><td class="price-col">73,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a14002.html'"><td><a href="a14002.html">A14002</a></td><td><a href="a14002.html">POWER LIFT 4D SUPER-CONCENTRATE</a></td><td>30 ml</td><td class="price-col">47,00</td><td class="price-col">63,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a14003.html'"><td><a href="a14003.html">A14003</a></td><td><a href="a14003.html">ROSE D-TOX SUPER-CONCENTRATE</a></td><td>30 ml</td><td class="price-col">40,00</td><td class="price-col">52,00</td></tr>
+
+                <!-- АЛЬГИНАТНЫЕ МАСКИ -->
+                <tr class="section-header"><td colspan="5">АЛЬГИНАТНЫЕ МАСКИ</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a06149.html'"><td><a href="a06149.html">A06149</a></td><td><a href="a06149.html">Goji mask 2070 (red) антиоксидант</a></td><td>1 mask</td><td class="price-col">6,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a06139.html'"><td><a href="a06139.html">A06139</a></td><td><a href="a06139.html">Reaffirming Mask 2020 (black) с углем</a></td><td>1 mask</td><td class="price-col">6,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a06140.html'"><td><a href="a06140.html">A06140</a></td><td><a href="a06140.html">Green Mask 2025 (green) насыщает O2</a></td><td>1 mask</td><td class="price-col">6,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a06141.html'"><td><a href="a06141.html">A06141</a></td><td><a href="a06141.html">Vitamin Vegetable Mask 2030 (orange) с витаминами</a></td><td>1 mask</td><td class="price-col">6,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a06142.html'"><td><a href="a06142.html">A06142</a></td><td><a href="a06142.html">Sensitive Mask 2040 (violet) успокоение</a></td><td>1 mask</td><td class="price-col">6,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a06143.html'"><td><a href="a06143.html">A06143</a></td><td><a href="a06143.html">NOVAnew Mask 2045 (pink) увлажнение</a></td><td>1 mask</td><td class="price-col">6,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a06146.html'"><td><a href="a06146.html">A06146</a></td><td><a href="a06146.html">RGnerin Mask 2055(blue) восстановление</a></td><td>1 mask</td><td class="price-col">6,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a06147.html'"><td><a href="a06147.html">A06147</a></td><td><a href="a06147.html">Kiwi Mask 2060 (light green) лифтинг</a></td><td>1 mask</td><td class="price-col">6,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a06163.html'"><td><a href="a06163.html">A06163</a></td><td><a href="a06163.html">WHITE GOLD MASK 2084 ультра успокаивающая</a></td><td>1 mask</td><td class="price-col">10,20</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a06162.html'"><td><a href="a06162.html">A06162</a></td><td><a href="a06162.html">ROSE GOLD MASK 2082 горячая маска с эффектом рф лифтинга</a></td><td>1 mask</td><td class="price-col">10,20</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a06151.html'"><td><a href="a06151.html">A06151</a></td><td><a href="a06151.html">Gold Mask 2080 минералы и витамины</a></td><td>1 mask</td><td class="price-col">8,70</td><td class="price-col">-</td></tr>
+
+                <!-- ОБОРУДОВАНИЕ -->
+                <tr class="section-header"><td colspan="5">ОБОРУДОВАНИЕ</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='aa0001.html'"><td><a href="aa0001.html">AA0001</a></td><td><a href="aa0001.html">Ионофорез для маски</a></td><td>1 штука</td><td class="price-col">249,50</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='aa0002.html'"><td><a href="aa0002.html">AA0002</a></td><td><a href="aa0002.html">Электроды для ионофореза</a></td><td>4 штуки</td><td class="price-col">16,70</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='aa0003.html'"><td><a href="aa0003.html">AA0003</a></td><td><a href="aa0003.html">Спонж для электрода</a></td><td>1 штука</td><td class="price-col">18,00</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='a50001.html'"><td><a href="a50001.html">A50001</a></td><td><a href="a50001.html">Массажер для глаз</a></td><td>1 штука</td><td class="price-col">256,10</td><td class="price-col">-</td></tr>
+
+                <!-- АКСЕССУАРЫ -->
+                <tr class="section-header"><td colspan="5">АКСЕССУАРЫ</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='axbol.html'"><td><a href="axbol.html">AXBOL</a></td><td><a href="axbol.html">CASMARA PRESTIGE бумаж.пакет с лого</a></td><td>1</td><td class="price-col">0,50</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='axbl.html'"><td><a href="axbl.html">AXBL</a></td><td><a href="axbl.html">CASMARA PRESTIGE бумаж.пакет с лого плотный</a></td><td>1</td><td class="price-col">1,20</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='ax40.html'"><td><a href="ax40.html">AX40</a></td><td><a href="ax40.html">Brush кисть нейлон</a></td><td>1</td><td class="price-col">8,40</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='ax14.html'"><td><a href="ax14.html">AX14</a></td><td><a href="ax14.html">FACE TERRY TOWEL 30*30 полотенце</a></td><td>1</td><td class="price-col">8,40</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='ax13.html'"><td><a href="ax13.html">AX13</a></td><td><a href="ax13.html">HAND TERRY TOWEL 100*50 полотенце</a></td><td>1</td><td class="price-col">10,40</td><td class="price-col">-</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='ax03.html'"><td><a href="ax03.html">AX03</a></td><td><a href="ax03.html">TERRY COVER TOWEL большое полотенце</a></td><td>1</td><td class="price-col">44,00</td><td class="price-col">-</td></tr>
+
+                <!-- ПОДАРОЧНЫЕ НАБОРЫ -->
+                <tr class="section-header"><td colspan="5">ПОДАРОЧНЫЕ НАБОРЫ - ограниченное предложение</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='al24252.html'"><td><a href="al24252.html">AL24252</a></td><td><a href="al24252.html">BEAUTY BOX/ blue Sensation Hydro-Nutri +Vitamin shot</a></td><td>50 ml+50ml</td><td class="price-col">52,70</td><td class="price-col">75,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='al2503.html'"><td><a href="al2503.html">AL2503</a></td><td><a href="al2503.html">REHYDRATING SET Ocean miracle Fresh serum 50ml + SPF50 Photoaging cream-gel + bronze cosmetic bag</a></td><td>50 ml+50 ml</td><td class="price-col">43,90</td><td class="price-col">57,00</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='al2508.html'"><td><a href="al2508.html">AL2508</a></td><td><a href="al2508.html">RED PACK Rgnerin Hydro-Nutri cream 50 ml + Wrinkle serum 50 ml</a></td><td>50 ml+50 ml</td><td class="price-col">66,80</td><td class="price-col">89,60</td></tr>
+                <tr class="clickable-row" onclick="window.location.href='al2509.html'"><td><a href="al2509.html">AL2509</a></td><td><a href="al2509.html">RED PACK HYDRA LIFTING FRESH CREAM 50 ml+ SERUM 50 ml</a></td><td>50 ml+50 ml</td><td class="price-col">44,90</td><td class="price-col">65,00</td></tr>
