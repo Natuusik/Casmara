@@ -1,1 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASMARA Прайс-лист 2026</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+
+        /* Авторизация */
+        #auth-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .auth-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .auth-box input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 80%;
+            font-size: 16px;
+        }
+        .auth-box button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+
+        /* Главный контент */
+        #main-content {
+            display: none; /* Скрыто до ввода пароля */
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .contacts {
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        /* Таблица */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px 10px;
+            text-align: left;
+            font-size: 14px;
+        }
+        th {
+            background-color: #e9e9e9;
+        }
+        .section-header {
+            background-color: #dcdcdc;
+            font-weight: bold;
+        }
+        .highlight-yellow { background-color: #ffffcc; }
+        .highlight-orange { background-color: #ffe5cc; }
+        .highlight-blue { background-color: #e6f7ff; }
+
+        tr.clickable-row {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        tr.clickable-row:hover {
+            background-color: #f0f0f0 !important;
+        }
+
+        /* Модальное окно (Информационная карточка) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 500;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Окно входа по паролю -->
+    <div id="auth-overlay">
+        <div class="auth-box">
+            <h2>Доступ ограничен</h2>
+            <p>Введите пароль для просмотра прайс-листа:</p>
+            <input type="password" id="password-input" placeholder="Пароль">
+            <br>
+            <button onclick="checkPassword()">Войти</button>
+            <p id="error-msg" style="color: red; display: none;">Неверный пароль!</p>
+        </div>
+    </div>
+
+    <!-- Основной контент страницы -->
+    <div id="main-content">
+        <h1>CASMARA ПРАЙСЛИСТ 2026</h1>
+        <div class="contacts">
+            Tel: +372 5154806 | info@medesta.eu<br>
+            FB: Ksenia Ossina | Insta: @xenioss
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Код</th>
+                    <th>Наименование</th>
+                    <th>Объем</th>
+                    <th>Цена с налогом</th>
+                    <th>Мин. цена клиенту</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- EXPERT DERMAPEEL -->
+                <tr class="section-header"><td colspan="5">EXPERT DERMAPEEL хим.пилинги</td></tr>
+                <tr class="clickable-row" onclick="openDetails('A16000', 'EXPERT DERMAPEEL PROFESSIONAL KIT проф.набор', '20 уходов', '243.00 €', '-')">
+                    <td>A16000</td><td>EXPERT DERMAPEEL PROFESSIONAL KIT проф.набор</td><td>20 уходов</td><td>243,00</td><td>-</td>
+                </tr>
+
+                <!-- RETINOL PRO AGE LINE -->
+                <tr class="section-header"><td colspan="5">NEW! RETINOL PRO AGE LINE!</td></tr>
+                <tr class="clickable-row highlight-yellow" onclick="openDetails('A07000', 'Retinol Pro Age treatment 0,15%', 'Бокс-2 ухода', '48.00 €', '-')">
+                    <td>A07000</td><td>Retinol Pro Age treatment 0,15%</td><td>Бокс-2 ухода</td><td>48,00</td><td>-</td>
+                </tr>
+                <tr class="clickable-row highlight-yellow" onclick="openDetails('A07100', 'Retinol Pro Age treatment 0,3%', 'Бокс-2 ухода', '50.00 €', '-')">
+                    <td>A07100</td><td>Retinol Pro Age treatment 0,3%</td><td>Бокс-2 ухода</td><td>50,00</td><td>-</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A07001', 'Retinol Renewal Day cream SPF 50 защитный и восстанавлив.', '50 ml', '45.30 €', '62.00 €')">
+                    <td>A07001</td><td>Retinol Renewal Day cream SPF 50 защитный и восстанавлив.</td><td>50 ml</td><td>45,30</td><td>62,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A07002', 'Retinol Renewal Night cream 0,15% pure retinol', '30 ml', '42.00 €', '56.00 €')">
+                    <td>A07002</td><td>Retinol Renewal Night cream 0,15% pure retinol</td><td>30 ml</td><td>42,00</td><td>56,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A07003', 'Retinol Renewal Night cream 0,3% pure retinol', '30 ml', '41.20 €', '57.00 €')">
+                    <td>A07003</td><td>Retinol Renewal Night cream 0,3% pure retinol</td><td>30 ml</td><td>41,20</td><td>57,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('AL0712', 'RETINOL PROAGE DAY & NIGHT ROUTINE 0,15%', '50 + 30 ml', '71.00 €', '90.60 €')">
+                    <td>AL0712</td><td>RETINOL PROAGE DAY & NIGHT ROUTINE 0,15%</td><td>50 + 30 ml</td><td>71,00</td><td>90,60</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('AL0713', 'RETINOL PROAGE DAY & NIGHT ROUTINE 0,3%', '50 + 30 ml', '74.10 €', '94.20 €')">
+                    <td>AL0713</td><td>RETINOL PROAGE DAY & NIGHT ROUTINE 0,3%</td><td>50 + 30 ml</td><td>74,10</td><td>94,20</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A07007', 'Retinol Proage body cream 200 ml крем для тела с ретинолом ночь', '200 ml', '40.90 €', '51.00 €')">
+                    <td>A07007</td><td>Retinol Proage body cream 200 ml крем для тела с ретинолом ночь</td><td>200 ml</td><td>40,90</td><td>51,00</td>
+                </tr>
+
+                <!-- AGUEDA'S SECRET GOLDEN AGE LINE -->
+                <tr class="section-header"><td colspan="5">NEW! AGUEDA'S SECRET GOLDEN AGE LINE омоложение с экзосомами, PDRN, коллагеном</td></tr>
+                <tr class="clickable-row highlight-orange" onclick="openDetails('A18000', 'AGUEDA\'S SECRET GOLDEN AGE Treatment box NEW', 'Бокс-2 ухода', '60.00 €', '-')">
+                    <td>A18000</td><td>AGUEDA'S SECRET GOLDEN AGE Treatment box NEW</td><td>Бокс-2 ухода</td><td>60,00</td><td>-</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A18001', 'AGUEDA\'S SECRET GOLDEN AGE Cream', '50 ml', '65.90 €', '89.90 €')">
+                    <td>A18001</td><td>AGUEDA'S SECRET GOLDEN AGE Cream</td><td>50 ml</td><td>65,90</td><td>89,90</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A18002', 'AGUEDA\'S SECRET GOLDEN AGE Serum', '50 ml', '63.80 €', '88.00 €')">
+                    <td>A18002</td><td>AGUEDA'S SECRET GOLDEN AGE Serum</td><td>50 ml</td><td>63,80</td><td>88,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A18006', 'AGUEDA\'S SECRET GOLDEN AGE INTENSE AMPOULE', '10*4 ml', '42.50 €', '54.00 €')">
+                    <td>A18006</td><td>AGUEDA'S SECRET GOLDEN AGE INTENSE AMPOULE</td><td>10*4 ml</td><td>42,50</td><td>54,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A18007', 'AGUEDA\'S SECRET GOLDEN AGE EYE CREAM NEW', '15 ml', '36.40 €', '47.00 €')">
+                    <td>A18007</td><td>AGUEDA'S SECRET GOLDEN AGE EYE CREAM NEW</td><td>15 ml</td><td>36,40</td><td>47,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('AL185', 'AGUEDA\'S SECRET GOLDEN AGE BOX CREAM +EYE CREAM NEW', '50+15 ml', '85.90 €', '120.00 €')">
+                    <td>AL185</td><td>AGUEDA'S SECRET GOLDEN AGE BOX CREAM +EYE CREAM NEW</td><td>50+15 ml</td><td>85,90</td><td>120,00</td>
+                </tr>
+
+                <!-- CASMARA BOOSTER SHEET MASK -->
+                <tr class="section-header"><td colspan="5">CASMARA BOOSTER SHEET MASK Магнитные бустерные маски</td></tr>
+                <tr class="clickable-row" onclick="openDetails('A75002', 'Anti Age Retinol V mask омолаживающая с раст ретинолом', '1 шт', '6.20 €', '8.90 €')">
+                    <td>A75002</td><td>Anti Age Retinol V mask омолаживающая с раст ретинолом</td><td>1 шт</td><td>6,20</td><td>8,90</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A75001', 'Glow Vitamin C mask с витамином C', '1 шт', '6.20 €', '8.90 €')">
+                    <td>A75001</td><td>Glow Vitamin C mask с витамином C</td><td>1 шт</td><td>6,20</td><td>8,90</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A75003', 'Hyaluronic mask увлажняющая', '1 шт', '6.20 €', '8.90 €')">
+                    <td>A75003</td><td>Hyaluronic mask увлажняющая</td><td>1 шт</td><td>6,20</td><td>8,90</td>
+                </tr>
+
+                <!-- URBAN PROTECT LINE -->
+                <tr class="section-header"><td colspan="5">ДЛЯ ЛИЦА / URBAN PROTECT LINE</td></tr>
+                <tr class="clickable-row" onclick="openDetails('A50011', 'Recovery Hand cream крем для рук', '50 ml', '12.50 €', '17.00 €')">
+                    <td>A50011</td><td>Recovery Hand cream крем для рук</td><td>50 ml</td><td>12,50</td><td>17,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A09001', 'DD CREAM Urban Protect Light 01 тонирующий крем SPF30', '50 ml', '24.20 €', '32.00 €')">
+                    <td>A09001</td><td>DD CREAM Urban Protect Light 01 тонирующий крем SPF30</td><td>50 ml</td><td>24,20</td><td>32,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A09500', 'DD CREAM Urban Protect Light 00 тонирующий крем SPF50', '50 ml', '24.20 €', '32.40 €')">
+                    <td>A09500</td><td>DD CREAM Urban Protect Light 00 тонирующий крем SPF50</td><td>50 ml</td><td>24,20</td><td>32,40</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A09501', 'DD CREAM Urban Protect Light 01 тонирующий крем SPF50', '50 ml', '24.20 €', '32.40 €')">
+                    <td>A09501</td><td>DD CREAM Urban Protect Light 01 тонирующий крем SPF50</td><td>50 ml</td><td>24,20</td><td>32,40</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A09502', 'DD CREAM Urban Protect Light 02 тонирующий крем SPF50', '50 ml', '24.20 €', '32.40 €')">
+                    <td>A09502</td><td>DD CREAM Urban Protect Light 02 тонирующий крем SPF50</td><td>50 ml</td><td>24,20</td><td>32,40</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A12010', 'MICELLAR WATER URBAN PROTECT очищ.мицелл вода', '400 ml', '15.00 €', '23.00 €')">
+                    <td>A12010</td><td>MICELLAR WATER URBAN PROTECT очищ.мицелл вода</td><td>400 ml</td><td>15,00</td><td>23,00</td>
+                </tr>
+
+                <!-- ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ -->
+                <tr class="section-header"><td colspan="5">ОЧИСТИТЕЛИ КЛАССА ПРЕМИУМ</td></tr>
+                <tr class="clickable-row" onclick="openDetails('A00008', 'TONIC ESSENSE тоник для лица', '150 ml', '14.90 €', '22.00 €')">
+                    <td>A00008</td><td>TONIC ESSENSE тоник для лица</td><td>150 ml</td><td>14,90</td><td>22,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A91001', 'BALANCING cleanser с экстрактом ягод Годжи', '150 ml', '14.90 €', '22.00 €')">
+                    <td>A91001</td><td>BALANCING cleanser с экстрактом ягод Годжи</td><td>150 ml</td><td>14,90</td><td>22,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A90004', 'BALANCING cleanser с экстрактом ягод Годжи', '500 ml', '35.00 €', '-')">
+                    <td>A90004</td><td>BALANCING cleanser с экстрактом ягод Годжи</td><td>500 ml</td><td>35,00</td><td>-</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A01002', 'Cleanser 3 in 1 deep Cleansing с зел.чаем', '150 ml', '14.90 €', '22.00 €')">
+                    <td>A01002</td><td>Cleanser 3 in 1 deep Cleansing с зел.чаем</td><td>150 ml</td><td>14,90</td><td>22,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A00006', 'Cleanser 3 in 1 deep cleanser с зел.чаем', '500 ml', '35.00 €', '-')">
+                    <td>A00006</td><td>Cleanser 3 in 1 deep cleanser с зел.чаем</td><td>500 ml</td><td>35,00</td><td>-</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A91005', 'Natural peeling Three Action пилинг на основе кислот', '150 ml', '28.50 €', '39.90 €')">
+                    <td>A91005</td><td>Natural peeling Three Action пилинг на основе кислот</td><td>150 ml</td><td>28,50</td><td>39,90</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A00113', 'Anti-Blemish cleanser очиститель-себорегулятор б с азелогицином', '150 ml', '14.90 €', '22.00 €')">
+                    <td>A00113</td><td>Anti-Blemish cleanser очиститель-себорегулятор б с азелогицином</td><td>150 ml</td><td>14,90</td><td>22,00</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A01104', 'Detox Cleanser очиститель с салиц кислотой', '150 ml', '-', '-')">
+                    <td>A01104</td><td>Detox Cleanser очиститель с салиц кислотой</td><td>150 ml</td><td>-</td><td>-</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A90006', 'Natural peeling Three Action пилинг на основе кислот', '500 ml', '-', '-')">
+                    <td>A90006</td><td>Natural peeling Three Action пилинг на основе кислот</td><td>500 ml</td><td>-</td><td>-</td>
+                </tr>
+                <tr class="clickable-row" onclick="openDetails('A90010', 'OPEN PORE GEL размягчает поры перед чисткой', '150 ml', '-', '-')">
+                    <td>A90010</td><td>OPEN PORE GEL размягчает поры перед чисткой</td><td>150 ml</td><td>-</td><td>-</td>
+                </tr>
+
+                <!-- NEW! СЕРИЯ Q10 RESCUE -->
+                <tr class="section-header"><td colspan="5">NEW! СЕРИЯ Q10 RESCUE Anti-age</td></tr>
+                <tr class="clickable-row highlight-blue" onclick="openDetails('A17200', 'Q10 Rescue treatment box', 'Бокс-2 ухода', '-', '-')">
+                    <td>A17200</td><td>Q10 Rescue treatment box</td><td>Бокс-2 ухода</td><td>-</td><td>-</td>
+                </tr>
+                <tr class="clickable-row highlight-blue" onclick="openDetails('A17201', 'Q10 Resque Nutri cream ультрапитательный крем 50+', '50 ml', '53.00 €', '78.00 €')">
+                    <td>A17201</td><td>Q10 Resque Nutri cream ультрапитательный крем 50+</td><td>50 ml</td><td>53,00</td><td>78,00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Модальное окно (Карточка товара) -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Описание товара</h2>
+            <hr>
+            <p><strong>Код товара:</strong> <span id="modal-code"></span></p>
+            <p><strong>Объем:</strong> <span id="modal-volume"></span></p>
+            <p><strong>Цена с налогом:</strong> <span id="modal-price"></span></p>
+            <p><strong>Мин. цена клиенту:</strong> <span id="modal-minprice"></span></p>
+            <br>
+            <div id="modal-link-container">
+                <!-- Ссылка на внешний файл/инструкцию -->
+                <a id="modal-file-link" href="#" target="_blank" style="display:inline-block; padding: 8px 15px; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">Открыть файл с описанием (PDF/DOC)</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Функция проверки пароля (По умолчанию: 1234)
+        function checkPassword() {
+            const password = document.getElementById('password-input').value;
+            if (password === '1234') { 
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        // Функция открытия карточки при нажатии на строку
+        function openDetails(code, name, volume, price, minPrice) {
+            document.getElementById('modal-title').innerText = name;
+            document.getElementById('modal-code').innerText = code;
+            document.getElementById('modal-volume').innerText = volume;
+            document.getElementById('modal-price').innerText = price;
+            document.getElementById('modal-minprice').innerText = minPrice;
+
+            // Здесь укажите путь к файлу/странице для каждого товара
+            // В примере открывается файл по названию кода, например: "files/A16000.pdf"
+            const fileLink = document.getElementById('modal-file-link');
+            fileLink.href = 'files/' + code + '.pdf'; 
+
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        // Закрыть карточку
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Закрытие модального окна при клике вне его
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
 
