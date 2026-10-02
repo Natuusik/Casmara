@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retinol Renewal Night cream 0,15% pure retinol | CASMARA</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .product-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-back {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #222222;
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            transition: background 0.2s ease;
+        }
+        .btn-back:hover {
+            background-color: #444444;
+        }
+
+        .product-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .product-image-container {
+            flex: 1 1 300px;
+            text-align: center;
+        }
+        .product-image {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            object-fit: cover;
+        }
+
+        .product-info {
+            flex: 1 1 400px;
+        }
+        .product-title {
+            margin-top: 0;
+            font-size: 24px;
+            color: #111111;
+        }
+
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .details-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 14px;
+        }
+        .details-table td.label {
+            font-weight: 600;
+            color: #666666;
+            width: 40%;
+        }
+        .details-table td.price-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2b8a3e;
+        }
+
+        .description-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+        .description-section h3 {
+            margin-top: 0;
+            color: #222222;
+        }
+        .description-text {
+            line-height: 1.6;
+            color: #555555;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="product-card">
+        <!-- КНОПКА ВОЗВРАТА НА ГЛАВНЫЙ ПРАЙС -->
+        <a href="index.html" class="btn-back">← Вернуться к прайс-листу</a>
+
+        <div class="product-layout">
+            
+            <div class="product-image-container">
+                <img src="A07002.jpg" alt="Retinol Renewal Night cream" class="product-image">
+            </div>
+
+            <div class="product-info">
+                <!-- НАЗВАНИЕ ТОВАРА -->
+                <h1 class="product-title">Retinol Renewal Night cream 0,15% pure retinol</h1>
+
+                <table class="details-table">
+                    <tr>
+                        <td class="label">Код товара:</td>
+                        <td><strong>A07002</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Категория:</td>
+                        <td>Ночные кремы / Ретинол</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Объем / Кол-во:</td>
+                        <td>30 ml</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Цена (с налогом):</td>
+                        <td class="price-value">42,00 €</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Мин. цена клиенту:</td>
+                        <td class="price-value">56,00 €</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="description-section">
+            <h3>Описание и протокол применения</h3>
+            <div class="description-text">
+                <p>
+                    Ночной обновляющий крем с чистым ретинолом в концентрации 0,15%. Стимулирует клеточное обновление, разглаживает морщины и улучшает текстуру кожи во время ночного отдыха.
+                </p>
+                <ul>
+                    <li><strong>Активные компоненты:</strong> Чистый ретинол 0,15%.</li>
+                    <li><strong>Применение:</strong> Наносить вечером на чистую и сухую кожу лица легкими массирующими движениями.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- СКРИПТ ПРОВЕРКИ АВТОРИЗАЦИИ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (sessionStorage.getItem('casmara_auth') !== 'true') {
+                alert('Пожалуйста, введите пароль на главной странице!');
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+
+</body>
+</html>
